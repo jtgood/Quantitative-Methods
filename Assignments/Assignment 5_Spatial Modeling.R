@@ -111,6 +111,17 @@ anova(model1, model1_exp, model1_exp_nug)
 anova(model2, model2_exp, model2_exp_nug)
 #? not working due to forms not being two sided? 
 
+#suggested:
+summary(model1)
+summary(model2)
+
+summary(model1_exp)
+summary(model2_exp)
+
+summary(model1_exp_nug)
+summary(model2_exp_nug)
+
+
 #By including spatial error terms, the single species comparison 
 #had a farily large impact on the coefficents of the model as seen
 #from the very different outputs between the two graphs respective of 
