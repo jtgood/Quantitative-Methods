@@ -96,7 +96,6 @@ plot(Variogram(model2_exp, resType = 'normalized', maxDist = max_dist))
 #normally distributed 
 summary(model1_exp)
 summary(model2_exp)
-#? Better models available? Maybe spherical? 
 
 #with nugget
 model1_exp_nug <- update(model1_exp, corr = corExp(form = ~ x + y, nugget = T))
@@ -107,11 +106,32 @@ plot(Variogram(model2_exp_nug, resType = 'n', maxDist = max_dist))
 summary(model1_exp_nug)
 summary(model2_exp_nug)
 
-anova(model1, model1_exp, model1_exp_nug)
-anova(model2, model2_exp, model2_exp_nug)
+#Spherical 
+model1_sph <- update(model1, corr = corSpher(form = ~x + y))
+model2_sph <- update(model2, corr = corSpher(form = ~x + y))
+plot(Variogram(model1_sph, maxDist = max_dist))# Sucks
+plot(Variogram(model1_sph, resType = 'normalized', maxDist = max_dist))
+#That ones better
+plot(Variogram(model2_sph, maxDist = max_dist))
+plot(Variogram(model2_sph, resType = 'normalized', maxDist = max_dist))
+
+#Gaussian
+model1_gau <- update(model1, corr = corGaus(form = ~x + y))
+model2_gau <- update(model2, corr = corGaus(form = ~x + y))
+plot(Variogram(model1_gau, maxDist = max_dist))
+plot(Variogram(model1_gau, resType = 'normalized', maxDist = max_dist))#maybe
+plot(Variogram(model2_gau, maxDist = max_dist))
+plot(Variogram(model2_gau, resType = 'normalized', maxDist = max_dist))#not as
+#spherical
+
+#As suggested in question 2?
+anova(model1, model1_exp, model1_sph, model1_gau)
+anova(model2, model2_exp, model2_sph, model1_gau)
 #? not working due to forms not being two sided? 
 
 #suggested:
+?nlme::gls(model1~model2)
+
 summary(model1)
 summary(model2)
 
@@ -121,11 +141,17 @@ summary(model2_exp)
 summary(model1_exp_nug)
 summary(model2_exp_nug)
 
+summary(model1_sph)
+summary(model2_sph)
+
+summary(model1_gau)
+summary(model2_gau)
 
 #By including spatial error terms, the single species comparison 
 #had a farily large impact on the coefficents of the model as seen
 #from the very different outputs between the two graphs respective of 
-#their data input.
+#their data input. Normalized models were usually better fitted to than others
+#but spherical spatial models were best in representing the spatial comparisons.
 
 #ANOVA not working? Why is my 'form' not a two-sided fromula?
 
